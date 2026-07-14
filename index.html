@@ -1,309 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Daniel Denisov - Software Developer specializing in C++, Python, Kernel Development, ML/AI, and Robotics">
-  <meta name="keywords" content="Software Developer, C++, Python, Machine Learning, Robotics, FRC, Kernel Development">
-  <meta name="author" content="Daniel Denisov">
-
-  <title>Daniel Denisov | Software Developer</title>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="img/favicon.png">
-
-  <!-- Stylesheet -->
-  <link rel="stylesheet" type="text/css" href="mainpage.css">
-
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/1d715d876b.js" crossorigin="anonymous"></script>
-
-  <!-- Projects Data -->
-  <script type="text/javascript" src="projects.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Denisov</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { mono: ['"Courier New"', 'Courier', 'monospace'] },
+                    colors: {
+                        t: {
+                            bg:     '#222222',
+                            bright: '#FFFFFF',   // primary — pure white
+                            mid:    '#BCBCBC'    // secondary — was "bright" before
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after { font-family: 'Courier New', Courier, monospace; }
+        body { background: transparent; }
+        .nav-link { position: fixed; display: block; z-index: 10; cursor: pointer; opacity: 0; }
+        #bgCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        hr { border: none; border-top: 1px solid #444; margin: 0; }
+    </style>
 </head>
+<body class="text-t-bright">
 
-<body>
-  <!-- HEADER / NAVIGATION -->
-  <header id="header">
-    <nav>
-      <div class="nav-logo">DD</div>
-
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-
-      <div class="nav-social">
-        <a href="https://www.youtube.com/@DanTheEpicMan-" target="_blank" aria-label="YouTube">
-          <i class="fab fa-youtube"></i>
-        </a>
-        <a href="https://github.com/DanTheEpicMan" target="_blank" aria-label="GitHub">
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-
-      <div class="menu-toggle" id="menuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </nav>
-  </header>
-
-  <!-- HERO SECTION -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <p class="hero-subtitle">Hey, I'm</p>
-      <h1 class="hero-title">
-        Daniel <span class="gradient-text">Denisov</span>
-      </h1>
-      <p class="hero-description">
-        High School student passionate about <strong>System Architecture</strong>, <strong>Linux</strong>, and
-        <strong>Backend Development</strong>.
-        Experienced in C++, Python, Kernel Development, ML/AI, and Robotics.
-      </p>
-      <div class="hero-buttons">
-        <a href="#projects" class="btn btn-primary">View My Work</a>
-        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT SECTION -->
-  <section id="about">
-    <div class="section-header">
-      <span class="section-tag">About Me</span>
-      <h2 class="section-title">Who I Am</h2>
-      <p class="section-description">
-        I'm currently in high school, planning to pursue Computer Science in college.
-        My passion lies in low-level programming, system architecture, and building robust backend systems.
-        I've gained hands-on experience through internships, competitive robotics, and personal projects.
-      </p>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE SECTION -->
-  <section id="experience">
-    <div class="section-header">
-      <span class="section-tag">Experience</span>
-      <h2 class="section-title">My Journey</h2>
-    </div>
-
-    <div class="timeline">
-      <!-- FRC Robotics -->
-      <div class="timeline-item glass-card">
-        <p class="timeline-date">2022 - Present</p>
-        <h3 class="timeline-title">Director of Software</h3>
-        <p class="timeline-company">Team 3637: The Daleks - FIRST Robotics Competition</p>
-        <p class="timeline-description">
-          Lead developer and team project manager for competitive robotics team.
-          Architect codebase, train new members, and oversee all technical aspects of robot development.
+    <!-- ── HERO ── -->
+    <section id="about" class="min-h-screen flex flex-col justify-center px-10 max-w-5xl mx-auto pt-12 pb-16">
+        <p class="text-7xl leading-[1.05] text-t-bright tracking-tight">DANIEL DENISOV</p>
+        <p class="text-sm tracking-[0.2em] text-t-mid mt-3">CS @ PURDUE · CLASS OF '30</p>
+        <p class="mt-6 text-t-mid text-sm leading-loose max-w-md">
+            I write code close to the metal. Systems programmer, robotics lead,
+            and kernel tinkerer — starting CS at Purdue in Fall '25.
         </p>
-        <ul class="timeline-achievements">
-          <li>Participated in 2024 World Championship</li>
-          <li>Won Excellence in Engineering Award (2025)</li>
-          <li>Won Engineering Inspiration Award (2025)</li>
-          <li>1st Place at Regional Event + Impact Award (2024)</li>
-          <li>Developed autonomous navigation and vision systems using WPILib</li>
-        </ul>
-      </div>
+        <div class="mt-8 flex gap-8 text-t-mid text-xs tracking-widest">
+            <a href="mailto:daniel.denisov999@gmail.com" class="hover:text-t-bright transition-colors">EMAIL ↗</a>
+            <a href="https://github.com/DanTheEpicMan" target="_blank" class="hover:text-t-bright transition-colors">GITHUB ↗</a>
+            <a href="https://youtube.com/@DanTheEpicMan-" target="_blank" class="hover:text-t-bright transition-colors">YOUTUBE ↗</a>
+        </div>
+    </section>
 
-      <!-- Stevens Institute Internship -->
-      <div class="timeline-item glass-card">
-        <p class="timeline-date">Summer 2024</p>
-        <h3 class="timeline-title">IT Intern - AI Compute Access</h3>
-        <p class="timeline-company">Stevens Institute of Technology - Division of IT</p>
-        <p class="timeline-description">
-          Researched and helped implement frameworks for students to access Stevens' AI compute cluster
-          through Jupyter Notebooks for ML/AI training and coursework.
-        </p>
-        <ul class="timeline-achievements">
-          <li>Researched best frameworks for classroom AI integration</li>
-          <li>Developed deployment strategies for Jupyter Notebook infrastructure</li>
-          <li>Enabled scalable access to GPU compute resources for students</li>
-        </ul>
-      </div>
+    <hr class="max-w-5xl mx-auto" />
 
-      <!-- NJCCIC Internship -->
-      <div class="timeline-item glass-card">
-        <p class="timeline-date">Summer 2023</p>
-        <h3 class="timeline-title">Advanced Cybersecurity Internship</h3>
-        <p class="timeline-company">New Jersey Cybersecurity & Communications Integration Cell</p>
-        <p class="timeline-description">
-          Worked in a team developing educational cybersecurity materials for middle and high schools,
-          including escape rooms, CTFs, and hands-on exercises.
-        </p>
-        <ul class="timeline-achievements">
-          <li>Created cyber-themed escape room and unplugged exercises</li>
-          <li>Developed Capture The Flag (CTF) challenges for students</li>
-          <li>Researched AI threat detection for hospital cybersecurity</li>
-          <li>Focused on protecting patient data and mitigating operational impacts</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+    <!-- ── SKILLS ── -->
+    <section id="skills" class="py-24 px-10 max-w-5xl mx-auto">
+        <p class="text-xs tracking-[0.35em] text-t-mid mb-20">SKILLS</p>
 
-  <!-- SKILLS SECTION -->
-  <section id="skills">
-    <div class="section-header">
-      <span class="section-tag">Skills</span>
-      <h2 class="section-title">Technical Expertise</h2>
-    </div>
+        <div class="mb-28">
+            <p class="text-xs tracking-widest text-t-mid mb-12">LANGUAGES</p>
+            <div class="grid grid-cols-2 gap-16">
+                <div class="space-y-10">
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">C / C++</p>
+                        <p class="text-t-mid text-xs leading-loose">4+ years. FRC robot control systems, Windows kernel drivers, system-level tooling. Most comfortable language.</p>
+                    </div>
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">Python</p>
+                        <p class="text-t-mid text-xs leading-loose">ML/AI pipelines, scripting, research tooling. Used at Stevens HPC cluster project.</p>
+                    </div>
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">Java</p>
+                        <p class="text-t-mid text-xs leading-loose">WPILib robot programming across 3 competition seasons with Team 3637.</p>
+                    </div>
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">Bash / Shell</p>
+                        <p class="text-t-mid text-xs leading-loose">Linux automation, build pipelines, environment scripting.</p>
+                    </div>
+                </div>
+                <div class="min-h-[420px]" id="skills-right"></div>
+            </div>
+        </div>
 
-    <div class="skills-grid">
-      <div class="skill-card">
-        <div class="skill-icon">💻</div>
-        <h3 class="skill-name">C / C++</h3>
-      </div>
+        <hr class="mb-28" />
 
-      <div class="skill-card">
-        <div class="skill-icon">🐍</div>
-        <h3 class="skill-name">Python</h3>
-      </div>
+        <div class="mb-28">
+            <p class="text-xs tracking-widest text-t-mid mb-12">SYSTEMS</p>
+            <div class="grid grid-cols-2 gap-16">
+                <div class="space-y-10">
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">Linux</p>
+                        <p class="text-t-mid text-xs leading-loose">Daily driver. Kernel module development, custom builds, driver writing.</p>
+                    </div>
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">Kernel Development</p>
+                        <p class="text-t-mid text-xs leading-loose">Linux kernel modules and Windows kernel drivers. Low-level systems work is where I spend most personal project time.</p>
+                    </div>
+                    <div>
+                        <p class="text-t-bright text-sm mb-1">System Architecture</p>
+                        <p class="text-t-mid text-xs leading-loose">Memory management, IPC, driver model, real-time constraints on embedded hardware.</p>
+                    </div>
+                </div>
+                <div class="min-h-[300px]" id="systems-right"></div>
+            </div>
+        </div>
 
-      <div class="skill-card">
-        <div class="skill-icon">⚙️</div>
-        <h3 class="skill-name">Kernel Development</h3>
-      </div>
+        <hr class="mb-28" />
 
-      <div class="skill-card">
-        <div class="skill-icon">🤖</div>
-        <h3 class="skill-name">ML / AI</h3>
-      </div>
+        <div>
+            <p class="text-xs tracking-widest text-t-mid mb-12">OTHER</p>
+            <div class="flex flex-wrap gap-x-10 gap-y-4 text-t-bright text-sm">
+                <span>ML / AI</span>
+                <span>WPILib</span>
+                <span>CTF</span>
+                <span>Reverse Engineering</span>
+                <span>Cybersecurity</span>
+                <span>Computer Vision</span>
+                <span>Robotics</span>
+                <span>HPC / GPU Clusters</span>
+            </div>
+        </div>
+    </section>
 
-      <div class="skill-card">
-        <div class="skill-icon">🔧</div>
-        <h3 class="skill-name">WPILib</h3>
-      </div>
+    <hr class="max-w-5xl mx-auto" />
 
-      <div class="skill-card">
-        <div class="skill-icon">🪟</div>
-        <h3 class="skill-name">Windows Kernel Drivers</h3>
-      </div>
+    <!-- ── EXPERIENCE ── -->
+    <section id="projects" class="py-24 px-10 max-w-5xl mx-auto">
+        <p class="text-xs tracking-[0.35em] text-t-mid mb-16">EXPERIENCE</p>
 
-      <div class="skill-card">
-        <div class="skill-icon">🐧</div>
-        <h3 class="skill-name">Linux</h3>
-      </div>
+        <div class="space-y-14">
 
-      <div class="skill-card">
-        <div class="skill-icon">🏗️</div>
-        <h3 class="skill-name">System Architecture</h3>
-      </div>
-    </div>
-  </section>
+            <div class="grid grid-cols-3 gap-12 min-h-[38vh]">
+                <div class="text-xs text-t-mid space-y-1 pt-1">
+                    <p>2022 — 2025</p>
+                    <p class="mt-2">Team 3637 · The Daleks</p>
+                    <p>FIRST Robotics</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-t-bright text-base">Director of Software</h3>
+                    <p class="text-t-mid text-sm mt-4 leading-loose">
+                        Led all software engineering for a competitive FRC team across four seasons.
+                        Built autonomous navigation, computer vision pipelines, and real-time robot
+                        control systems in C++ and Java with WPILib. Managed developers from
+                        build season through world championships.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">2024 World Championship</span>
+                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">Excellence in Engineering '25</span>
+                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">Engineering Inspiration '25</span>
+                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">1st Place Regional '24</span>
+                    </div>
+                </div>
+            </div>
 
-  <!-- PROJECTS SECTION -->
-  <section id="projects">
-    <div class="section-header">
-      <span class="section-tag">Projects</span>
-      <h2 class="section-title">Featured Work</h2>
-    </div>
+            <div class="grid grid-cols-3 gap-12 min-h-[30vh]">
+                <div class="text-xs text-t-mid space-y-1 pt-1">
+                    <p>Summer 2024</p>
+                    <p class="mt-2">Stevens Institute</p>
+                    <p>of Technology</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-t-bright text-base">IT Intern — AI Compute Access</h3>
+                    <p class="text-t-mid text-sm mt-4 leading-loose">
+                        Prototyped student access frameworks for HPC GPU clusters via Jupyter Notebooks.
+                        Embedded in Division of IT working on compute allocation policy and cluster
+                        resource scheduling for AI workloads.
+                    </p>
+                </div>
+            </div>
 
-    <!-- Projects will be dynamically loaded from projects.js -->
-    <div class="projects-grid" id="projects-grid"></div>
-  </section>
+            <div class="grid grid-cols-3 gap-12 min-h-[30vh]">
+                <div class="text-xs text-t-mid space-y-1 pt-1">
+                    <p>Summer 2023</p>
+                    <p class="mt-2">NJCCIC</p>
+                    <p>State of New Jersey</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-t-bright text-base">Advanced Cybersecurity Intern</h3>
+                    <p class="text-t-mid text-sm mt-4 leading-loose">
+                        Built cybersecurity training materials — escape rooms and CTF challenges —
+                        at a state-level cyber defense organization. Worked alongside threat
+                        analysts at the NJ Cybersecurity &amp; Communications Integration Cell.
+                    </p>
+                </div>
+            </div>
 
-  <!-- CONTACT SECTION -->
-  <section id="contact">
-    <div class="section-header">
-      <span class="section-tag">Contact</span>
-      <h2 class="section-title">Get In Touch</h2>
-    </div>
+        </div>
+    </section>
 
-    <div class="contact-content">
-      <p class="section-description">
-        I'm always open to discussing new opportunities, collaborations, or just chatting about technology.
-        Feel free to reach out!
-      </p>
+    <hr class="max-w-5xl mx-auto" />
 
-      <a href="mailto:website.contact@danieldenisov.com" class="contact-email">
-        website.contact@danieldenisov.com
-      </a>
+    <!-- ── CONTACT ── -->
+    <section id="contact" class="min-h-[50vh] flex flex-col justify-center py-24 px-10 max-w-5xl mx-auto">
+        <p class="text-xs tracking-[0.35em] text-t-mid mb-16">CONTACT</p>
+        <div class="space-y-5 text-sm">
+            <a href="mailto:daniel.denisov999@gmail.com"
+               class="block text-t-bright hover:text-t-mid transition-colors">
+                daniel.denisov999@gmail.com
+            </a>
+            <a href="https://github.com/DanTheEpicMan" target="_blank"
+               class="block text-t-bright hover:text-t-mid transition-colors">
+                github.com/DanTheEpicMan
+            </a>
+        </div>
+        <p class="mt-40 text-t-mid text-xs">© 2025 Daniel Denisov</p>
+    </section>
 
-      <div class="contact-social">
-        <a href="https://www.youtube.com/@DanTheEpicMan-" target="_blank" class="social-link" aria-label="YouTube">
-          <i class="fab fa-youtube"></i>
-        </a>
-        <a href="https://github.com/DanTheEpicMan" target="_blank" class="social-link" aria-label="GitHub">
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-    </div>
-  </section>
+    <canvas id="bgCanvas"></canvas>
+    <script src="terminalEngine.js"></script>
+    <script>
+        const engine = new TerminalEngine('bgCanvas', {
+            fontSize:    16,
+            bgColor:     '#222222',
+            dimColor:    '#2D2D2D',
+            brightColor: '#FFFFFF',
+            navRow: 2
+        });
 
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2024 Daniel Denisov. Built with passion and code.</p>
-  </footer>
+        engine.setNavItems([
+            { text: 'about',    href: '#about'    },
+            { text: 'projects', href: '#projects' },
+            { text: 'contact',  href: '#contact'  }
+        ]);
 
-  <!-- JAVASCRIPT -->
-  <script>
-    // Header scroll effect
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 100) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
+        function addMasks() {
+            engine.masks = [];
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
 
-    // Mobile menu toggle
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.querySelector('.nav-links');
+            function docTop(el) {
+                return el.getBoundingClientRect().top + window.scrollY;
+            }
 
-    menuToggle.addEventListener('click', () => {
-      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-    });
+            const hero     = document.getElementById('about');
+            const skillsR  = document.getElementById('skills-right');
+            const systemsR = document.getElementById('systems-right');
+            const expSec   = document.getElementById('projects');
 
-    // Smooth scroll for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          // Close mobile menu if open
-          if (window.innerWidth <= 768) {
-            navLinks.style.display = 'none';
-          }
+            const heroTop = docTop(hero);
+            const charW   = engine.charWidth;
+
+            // Hero >  (always visible)
+            engine.addMask({
+                src: 'img/hero-gt.svg',
+                x: vw / 2 - 200,
+                docY: heroTop + vh * 0.05,
+                width: 200, height: 280,
+                proximityFade: false, blinking: false
+            });
+            // Hero _  (blinks)
+            engine.addMask({
+                src: 'img/hero-ul.svg',
+                x: vw / 2 - 200 + 155,
+                docY: heroTop + vh * 0.05,
+                width: 200, height: 280,
+                proximityFade: false, blinking: true
+            });
+
+            // Skills C++
+            const srLeft = skillsR.getBoundingClientRect().left;
+            engine.addMask({
+                src: 'img/cpp-placeholder.svg',
+                x: srLeft, docY: docTop(skillsR),
+                width: 480, height: 270, proximityFade: false
+            });
+            // Skills Python
+            engine.addMask({
+                src: 'img/python-placeholder.svg',
+                x: srLeft + 20, docY: docTop(skillsR) + 280,
+                width: 460, height: 190, proximityFade: false
+            });
+
+            // Systems Java
+            const sysLeft = systemsR.getBoundingClientRect().left;
+            engine.addMask({
+                src: 'img/java-placeholder.svg',
+                x: sysLeft, docY: docTop(systemsR) + 20,
+                width: 420, height: 210, proximityFade: false
+            });
+
+            // Experience robot
+            engine.addMask({
+                src: 'img/robot.svg',
+                x: vw * 0.62, docY: docTop(expSec) + 40,
+                width: 300, height: 390, proximityFade: false
+            });
+            // Experience shield
+            engine.addMask({
+                src: 'img/shield.svg',
+                x: vw * 0.63, docY: docTop(expSec) + expSec.offsetHeight * 0.64,
+                width: 260, height: 300, proximityFade: false
+            });
         }
-      });
-    });
 
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+        engine.start();
+        requestAnimationFrame(() => requestAnimationFrame(addMasks));
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
+        function syncNavLinks() {
+            document.querySelectorAll('.nav-link').forEach(el => el.remove());
+            engine.getNavItemRects().forEach((rect, i) => {
+                const a = document.createElement('a');
+                a.href = rect.href;
+                a.className = 'nav-link';
+                a.style.left   = rect.x + 'px';
+                a.style.top    = rect.y + 'px';
+                a.style.width  = rect.width  + 'px';
+                a.style.height = rect.height + 'px';
+                a.addEventListener('mouseenter', () => { engine.hoveredNavIndex = i; });
+                a.addEventListener('mouseleave', () => { engine.hoveredNavIndex = -1; });
+                document.body.appendChild(a);
+            });
         }
-      });
-    }, observerOptions);
 
-    // Observe all cards (except project cards which are handled by projects.js)
-    document.querySelectorAll('.glass-card, .skill-card').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      observer.observe(el);
-    });
-  </script>
+        syncNavLinks();
+        window.addEventListener('resize', () => { syncNavLinks(); addMasks(); });
+    </script>
 </body>
-
 </html>

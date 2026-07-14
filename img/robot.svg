@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520">
+  <!-- antenna -->
+  <rect x="192" y="0"   width="16" height="50"  fill="white"/>
+  <rect x="175" y="0"   width="50" height="14"  fill="white"/>
+  <!-- head -->
+  <rect x="100" y="50"  width="200" height="140" rx="10" fill="white"/>
+  <!-- neck -->
+  <rect x="170" y="190" width="60"  height="30"  fill="white"/>
+  <!-- body -->
+  <rect x="60"  y="220" width="280" height="200" rx="8"  fill="white"/>
+  <!-- left arm -->
+  <rect x="10"  y="220" width="44"  height="160" rx="10" fill="white"/>
+  <rect x="0"   y="374" width="64"  height="28"  rx="6"  fill="white"/>
+  <!-- right arm -->
+  <rect x="346" y="220" width="44"  height="160" rx="10" fill="white"/>
+  <rect x="336" y="374" width="64"  height="28"  rx="6"  fill="white"/>
+  <!-- hips -->
+  <rect x="80"  y="420" width="240" height="30"  rx="6"  fill="white"/>
+  <!-- left leg -->
+  <rect x="90"  y="450" width="90"  height="110" rx="8"  fill="white"/>
+  <!-- right leg -->
+  <rect x="220" y="450" width="90"  height="110" rx="8"  fill="white"/>
+</svg>
