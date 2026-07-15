@@ -11,17 +11,14 @@
                 extend: {
                     fontFamily: { mono: ['"Courier New"', 'Courier', 'monospace'] },
                     colors: {
-                        t: {
-                            bg:     '#222222',
-                            bright: '#FFFFFF',   // primary — pure white
-                            mid:    '#BCBCBC'    // secondary — was "bright" before
-                        }
+                        t: { bg: '#222222', bright: '#FFFFFF', mid: '#BCBCBC' }
                     }
                 }
             }
         }
     </script>
     <style>
+        html { scroll-behavior: smooth; }
         *, *::before, *::after { font-family: 'Courier New', Courier, monospace; }
         body { background: transparent; }
         .nav-link { position: fixed; display: block; z-index: 10; cursor: pointer; opacity: 0; }
@@ -32,79 +29,112 @@
 <body class="text-t-bright">
 
     <!-- ── HERO ── -->
-    <section id="about" class="min-h-screen flex flex-col justify-center px-10 max-w-5xl mx-auto pt-12 pb-16">
-        <p class="text-7xl leading-[1.05] text-t-bright tracking-tight">DANIEL DENISOV</p>
-        <p class="text-sm tracking-[0.2em] text-t-mid mt-3">CS @ PURDUE · CLASS OF '30</p>
-        <p class="mt-6 text-t-mid text-sm leading-loose max-w-md">
-            I write code close to the metal. Systems programmer, robotics lead,
-            and kernel tinkerer — starting CS at Purdue in Fall '25.
-        </p>
-        <div class="mt-8 flex gap-8 text-t-mid text-xs tracking-widest">
-            <a href="mailto:daniel.denisov999@gmail.com" class="hover:text-t-bright transition-colors">EMAIL ↗</a>
-            <a href="https://github.com/DanTheEpicMan" target="_blank" class="hover:text-t-bright transition-colors">GITHUB ↗</a>
-            <a href="https://youtube.com/@DanTheEpicMan-" target="_blank" class="hover:text-t-bright transition-colors">YOUTUBE ↗</a>
+    <!-- sm:justify-center restores desktop centering; flex-1 spacer only visible on mobile -->
+    <section id="about" class="min-h-screen flex flex-col sm:justify-center px-6 sm:px-10 max-w-5xl mx-auto">
+        <div class="flex-1 sm:hidden"></div>
+        <div class="pb-20 sm:pb-0">
+            <p class="text-4xl sm:text-6xl lg:text-7xl leading-[1.05] text-t-bright tracking-tight">DANIEL DENISOV</p>
+            <p class="text-xs sm:text-sm tracking-[0.2em] text-t-mid mt-3">CS @ PURDUE · CLASS OF '30</p>
+            <p class="mt-5 text-t-mid text-xs sm:text-sm leading-loose max-w-md">
+                Computer science student focused on systems programming, robotics, and OS internals. 
+            </p>
+            <div class="mt-6 flex gap-6 sm:gap-8 text-t-mid text-xs tracking-widest">
+                <a href="mailto:daniel.denisov999@gmail.com" class="hover:text-t-bright transition-colors">EMAIL</a>
+                <a href="https://github.com/DanTheEpicMan" target="_blank" class="hover:text-t-bright transition-colors">GITHUB</a>
+            </div>
         </div>
     </section>
 
     <hr class="max-w-5xl mx-auto" />
 
     <!-- ── SKILLS ── -->
-    <section id="skills" class="py-24 px-10 max-w-5xl mx-auto">
-        <p class="text-xs tracking-[0.35em] text-t-mid mb-20">SKILLS</p>
+    <section id="skills" class="py-16 sm:py-24 px-6 sm:px-10 max-w-5xl mx-auto">
+        <p class="text-xs tracking-[0.35em] text-t-mid mb-12 sm:mb-20">SKILLS</p>
 
-        <div class="mb-28">
-            <p class="text-xs tracking-widest text-t-mid mb-12">LANGUAGES</p>
-            <div class="grid grid-cols-2 gap-16">
-                <div class="space-y-10">
+        <!-- Languages -->
+        <div class="mb-20 sm:mb-28">
+            <p class="text-xs tracking-widest text-t-mid mb-8 sm:mb-12">LANGUAGES</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-28">
+
+                <!-- Desktop-only right column image area (hidden on mobile) -->
+                <div class="hidden sm:block sm:min-h-[520px] sm:order-last" id="skills-right"></div>
+
+                <!-- Text column: full-width on mobile, left col on desktop -->
+                <div class="space-y-8 sm:order-first">
+
+                    <!-- C / C++ — mobile image placeholder sits above text -->
                     <div>
-                        <p class="text-t-bright text-sm mb-1">C / C++</p>
-                        <p class="text-t-mid text-xs leading-loose">4+ years. FRC robot control systems, Windows kernel drivers, system-level tooling. Most comfortable language.</p>
+                        <div class="sm:hidden min-h-[130px] mb-5" id="skill-cpp-img"></div>
+                        <div id="skill-cpp">
+                            <p class="text-t-bright text-sm mb-1">C / C++</p>
+                            <p class="text-t-mid text-xs leading-loose">4+ years. FRC robot control, Windows kernel drivers, system-level tooling. Most comfortable language.</p>
+                        </div>
                     </div>
+
+                    <!-- Python — mobile image placeholder sits above text -->
                     <div>
-                        <p class="text-t-bright text-sm mb-1">Python</p>
-                        <p class="text-t-mid text-xs leading-loose">ML/AI pipelines, scripting, research tooling. Used at Stevens HPC cluster project.</p>
+                        <div class="sm:hidden min-h-[210px] mb-5" id="skill-python-img"></div>
+                        <div id="skill-python">
+                            <p class="text-t-bright text-sm mb-1">Python</p>
+                            <p class="text-t-mid text-xs leading-loose">ML/AI pipelines, scripting, research tooling. Used at Stevens HPC cluster project.</p>
+                        </div>
                     </div>
+
                     <div>
                         <p class="text-t-bright text-sm mb-1">Java</p>
-                        <p class="text-t-mid text-xs leading-loose">WPILib robot programming across 3 competition seasons with Team 3637.</p>
+                        <p class="text-t-mid text-xs leading-loose">WPILib robot programming, personal projects</p>
                     </div>
+
                     <div>
                         <p class="text-t-bright text-sm mb-1">Bash / Shell</p>
                         <p class="text-t-mid text-xs leading-loose">Linux automation, build pipelines, environment scripting.</p>
                     </div>
+
                 </div>
-                <div class="min-h-[420px]" id="skills-right"></div>
             </div>
         </div>
 
-        <hr class="mb-28" />
+        <hr class="mb-20 sm:mb-28" />
 
-        <div class="mb-28">
-            <p class="text-xs tracking-widest text-t-mid mb-12">SYSTEMS</p>
-            <div class="grid grid-cols-2 gap-16">
-                <div class="space-y-10">
+        <!-- Systems -->
+        <div class="mb-20 sm:mb-28">
+            <p class="text-xs tracking-widest text-t-mid mb-8 sm:mb-12">SYSTEMS</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16">
+
+                <!-- Desktop-only right column -->
+                <div class="hidden sm:block sm:min-h-[300px] sm:order-last" id="systems-right"></div>
+
+                <div class="space-y-8 sm:order-first">
+
+                    <!-- Linux — mobile placeholder above text -->
                     <div>
-                        <p class="text-t-bright text-sm mb-1">Linux</p>
-                        <p class="text-t-mid text-xs leading-loose">Daily driver. Kernel module development, custom builds, driver writing.</p>
+                        <div class="sm:hidden min-h-[270px] mb-5" id="skill-linux-img"></div>
+                        <div id="skill-linux">
+                            <p class="text-t-bright text-sm mb-1">Linux</p>
+                            <p class="text-t-mid text-xs leading-loose">Daily driver, expericned with QEMU/KVM</p>
+                        </div>
                     </div>
+
                     <div>
                         <p class="text-t-bright text-sm mb-1">Kernel Development</p>
-                        <p class="text-t-mid text-xs leading-loose">Linux kernel modules and Windows kernel drivers. Low-level systems work is where I spend most personal project time.</p>
+                        <p class="text-t-mid text-xs leading-loose">Windows Kernel Driver, SMM, and QUEMU Introspection</p>
                     </div>
+
                     <div>
                         <p class="text-t-bright text-sm mb-1">System Architecture</p>
                         <p class="text-t-mid text-xs leading-loose">Memory management, IPC, driver model, real-time constraints on embedded hardware.</p>
                     </div>
+
                 </div>
-                <div class="min-h-[300px]" id="systems-right"></div>
             </div>
         </div>
 
-        <hr class="mb-28" />
+        <hr class="mb-20 sm:mb-28" />
 
+        <!-- Other -->
         <div>
-            <p class="text-xs tracking-widest text-t-mid mb-12">OTHER</p>
-            <div class="flex flex-wrap gap-x-10 gap-y-4 text-t-bright text-sm">
+            <p class="text-xs tracking-widest text-t-mid mb-8 sm:mb-12">OTHER</p>
+            <div class="flex flex-wrap gap-x-8 gap-y-4 text-t-bright text-sm">
                 <span>ML / AI</span>
                 <span>WPILib</span>
                 <span>CTF</span>
@@ -120,62 +150,51 @@
     <hr class="max-w-5xl mx-auto" />
 
     <!-- ── EXPERIENCE ── -->
-    <section id="projects" class="py-24 px-10 max-w-5xl mx-auto">
-        <p class="text-xs tracking-[0.35em] text-t-mid mb-16">EXPERIENCE</p>
+    <section id="projects" class="py-16 sm:py-24 px-6 sm:px-10 max-w-5xl mx-auto">
+        <p class="text-xs tracking-[0.35em] text-t-mid mb-12 sm:mb-16">EXPERIENCE</p>
 
-        <div class="space-y-14">
+        <div class="space-y-12 sm:space-y-14">
 
-            <div class="grid grid-cols-3 gap-12 min-h-[38vh]">
-                <div class="text-xs text-t-mid space-y-1 pt-1">
-                    <p>2022 — 2025</p>
-                    <p class="mt-2">Team 3637 · The Daleks</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-12">
+                <div class="text-xs text-t-mid sm:pt-1">
+                    <p>2023 — 2026</p>
+                    <p class="mt-1 sm:mt-2">Team 3637 · The Daleks</p>
                     <p>FIRST Robotics</p>
                 </div>
-                <div class="col-span-2">
-                    <h3 class="text-t-bright text-base">Director of Software</h3>
-                    <p class="text-t-mid text-sm mt-4 leading-loose">
-                        Led all software engineering for a competitive FRC team across four seasons.
+                <div class="sm:col-span-2">
+                    <h3 class="text-t-bright text-sm sm:text-base">Director of Software</h3>
+                    <p class="text-t-mid text-xs sm:text-sm mt-3 leading-loose">
+                        Software Lead for FRC. Build autonomous navigation systems using YOLO Vision Models. 
                         Built autonomous navigation, computer vision pipelines, and real-time robot
-                        control systems in C++ and Java with WPILib. Managed developers from
-                        build season through world championships.
+                        control systems in C++ with WPILib.
                     </p>
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">2024 World Championship</span>
-                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">Excellence in Engineering '25</span>
-                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">Engineering Inspiration '25</span>
-                        <span class="text-t-mid text-xs border border-t-mid/30 px-2 py-1">1st Place Regional '24</span>
-                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-12 min-h-[30vh]">
-                <div class="text-xs text-t-mid space-y-1 pt-1">
-                    <p>Summer 2024</p>
-                    <p class="mt-2">Stevens Institute</p>
-                    <p>of Technology</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-12">
+                <div class="text-xs text-t-mid sm:pt-1">
+                    <p>Summer 2025</p>
+                    <p class="mt-1 sm:mt-2">Stevens Institute of Technology</p>
                 </div>
-                <div class="col-span-2">
-                    <h3 class="text-t-bright text-base">IT Intern — AI Compute Access</h3>
-                    <p class="text-t-mid text-sm mt-4 leading-loose">
+                <div class="sm:col-span-2">
+                    <h3 class="text-t-bright text-sm sm:text-base">IT Intern — AI Compute Access</h3>
+                    <p class="text-t-mid text-xs sm:text-sm mt-3 leading-loose">
                         Prototyped student access frameworks for HPC GPU clusters via Jupyter Notebooks.
-                        Embedded in Division of IT working on compute allocation policy and cluster
-                        resource scheduling for AI workloads.
+                        Embedded in Division of IT on compute allocation policy and resource scheduling.
                     </p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-12 min-h-[30vh]">
-                <div class="text-xs text-t-mid space-y-1 pt-1">
-                    <p>Summer 2023</p>
-                    <p class="mt-2">NJCCIC</p>
-                    <p>State of New Jersey</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-12">
+                <div class="text-xs text-t-mid sm:pt-1">
+                    <p>Summer 2025</p>
+                    <p class="mt-1 sm:mt-2">NJCCIC · State of New Jersey</p>
                 </div>
-                <div class="col-span-2">
-                    <h3 class="text-t-bright text-base">Advanced Cybersecurity Intern</h3>
-                    <p class="text-t-mid text-sm mt-4 leading-loose">
+                <div class="sm:col-span-2">
+                    <h3 class="text-t-bright text-sm sm:text-base">Advanced Cybersecurity Intern</h3>
+                    <p class="text-t-mid text-xs sm:text-sm mt-3 leading-loose">
                         Built cybersecurity training materials — escape rooms and CTF challenges —
-                        at a state-level cyber defense organization. Worked alongside threat
-                        analysts at the NJ Cybersecurity &amp; Communications Integration Cell.
+                        at a state-level cyber defense organization alongside threat analysts.
                     </p>
                 </div>
             </div>
@@ -186,30 +205,24 @@
     <hr class="max-w-5xl mx-auto" />
 
     <!-- ── CONTACT ── -->
-    <section id="contact" class="min-h-[50vh] flex flex-col justify-center py-24 px-10 max-w-5xl mx-auto">
-        <p class="text-xs tracking-[0.35em] text-t-mid mb-16">CONTACT</p>
-        <div class="space-y-5 text-sm">
-            <a href="mailto:daniel.denisov999@gmail.com"
-               class="block text-t-bright hover:text-t-mid transition-colors">
+    <section id="contact" class="min-h-[40vh] flex flex-col justify-center py-16 sm:py-24 px-6 sm:px-10 max-w-5xl mx-auto">
+        <p class="text-xs tracking-[0.35em] text-t-mid mb-12">CONTACT</p>
+        <div class="space-y-4 text-sm">
+            <a href="mailto:daniel.denisov999@gmail.com" class="block text-t-bright hover:text-t-mid transition-colors">
                 daniel.denisov999@gmail.com
             </a>
-            <a href="https://github.com/DanTheEpicMan" target="_blank"
-               class="block text-t-bright hover:text-t-mid transition-colors">
+            <a href="https://github.com/DanTheEpicMan" target="_blank" class="block text-t-bright hover:text-t-mid transition-colors">
                 github.com/DanTheEpicMan
             </a>
         </div>
-        <p class="mt-40 text-t-mid text-xs">© 2025 Daniel Denisov</p>
+        <p class="mt-32 text-t-mid text-xs">© 2026 Daniel Denisov</p>
     </section>
 
     <canvas id="bgCanvas"></canvas>
     <script src="terminalEngine.js"></script>
     <script>
         const engine = new TerminalEngine('bgCanvas', {
-            fontSize:    16,
-            bgColor:     '#222222',
-            dimColor:    '#2D2D2D',
-            brightColor: '#FFFFFF',
-            navRow: 2
+            fontSize: 16, bgColor: '#222222', dimColor: '#2D2D2D', brightColor: '#FFFFFF', navRow: 2
         });
 
         engine.setNavItems([
@@ -218,74 +231,83 @@
             { text: 'contact',  href: '#contact'  }
         ]);
 
+        function docTop(id) {
+            const el = document.getElementById(id);
+            return el ? el.getBoundingClientRect().top + window.scrollY : 0;
+        }
+        function elLeft(id) {
+            const el = document.getElementById(id);
+            return el ? el.getBoundingClientRect().left : 0;
+        }
+        function elRight(id) {
+            const el = document.getElementById(id);
+            return el ? el.getBoundingClientRect().right : window.innerWidth;
+        }
+
         function addMasks() {
             engine.masks = [];
             const vw = window.innerWidth;
             const vh = window.innerHeight;
+            const mobile = vw < 640;
 
-            function docTop(el) {
-                return el.getBoundingClientRect().top + window.scrollY;
+            // ── Hero: > and blinking _ ─────────────────────────────────────
+            const heroTop = docTop('about');
+            const gtW = mobile ? 180 : 280;
+            const gtH = gtW * (280 / 260); // maintain SVG viewBox aspect
+            const pairW = gtW * 1.77;
+            const gtX   = (vw - pairW) / 2;
+            engine.addMask({ src: 'img/hero-gt.svg', x: gtX,              docY: heroTop + vh * 0.12, width: gtW, height: gtH, blinking: false });
+            engine.addMask({ src: 'img/hero-ul.svg', x: gtX + gtW * 0.77, docY: heroTop + vh * 0.12, width: gtW, height: gtH, blinking: true  });
+
+            if (mobile) {
+                // ── Mobile: each mask positioned above its own text entry ──
+                // Uses the sm:hidden placeholder divs inserted before each skill text
+
+                const cppImgTop = docTop('skill-cpp-img');
+                const mW = Math.min(vw - 48, 300);
+                const mX = (vw - mW) / 2;
+                engine.addMask({ src: 'img/cpp-placeholder.svg', x: mX, docY: cppImgTop + 8,
+                    width: mW, height: Math.round(mW * 0.56) });
+
+                const pyImgTop = docTop('skill-python-img');
+                const pyW = Math.min(vw - 48, 280);
+                const pyX = (vw - pyW) / 2;
+                engine.addMask({ src: 'img/python.svg', x: pyX, docY: pyImgTop + 8,
+                    width: pyW, height: pyW }); // 800x800 — square
+
+                const linImgTop = docTop('skill-linux-img');
+                const lW = Math.min(vw - 48, 220);
+                const lX = (vw - lW) / 2;
+                engine.addMask({ src: 'img/linux.svg', x: lX, docY: linImgTop + 8,
+                    width: lW, height: Math.round(lW * 1.2) }); // 382x458 — portrait
+
+            } else {
+                // ── Desktop: restore original stacking in the right column ──
+                const srLeft  = elLeft('skills-right');
+                const srRight = elRight('skills-right');
+                const srTop   = docTop('skills-right');
+                const maskW   = Math.min(srRight - srLeft, 480);
+
+                // C++ (cpp-placeholder.svg viewBox 500x280 → aspect 1.786:1)
+                const cppW = Math.min(maskW, 380);
+                const cppH = Math.round(cppW * (280 / 500)); // 213px at 380w
+                engine.addMask({ src: 'img/cpp-placeholder.svg',
+                    x: srLeft, docY: srTop,
+                    width: cppW, height: cppH });
+
+                // Python (python.svg 800x800 — square)
+                const pyDesktopW = 260;
+                engine.addMask({ src: 'img/python.svg',
+                    x: srLeft + Math.round((cppW - pyDesktopW) / 2),
+                    docY: srTop + cppH + 20,
+                    width: pyDesktopW, height: pyDesktopW });
+
+                // Linux (linux.svg 382x458 — portrait, ratio ~1.199)
+                const lW = Math.min(srRight - srLeft, 300);
+                engine.addMask({ src: 'img/linux.svg',
+                    x: srLeft, docY: docTop('skill-linux'),
+                    width: lW, height: Math.round(lW * (458 / 382)) });
             }
-
-            const hero     = document.getElementById('about');
-            const skillsR  = document.getElementById('skills-right');
-            const systemsR = document.getElementById('systems-right');
-            const expSec   = document.getElementById('projects');
-
-            const heroTop = docTop(hero);
-            const charW   = engine.charWidth;
-
-            // Hero >  (always visible)
-            engine.addMask({
-                src: 'img/hero-gt.svg',
-                x: vw / 2 - 200,
-                docY: heroTop + vh * 0.05,
-                width: 200, height: 280,
-                proximityFade: false, blinking: false
-            });
-            // Hero _  (blinks)
-            engine.addMask({
-                src: 'img/hero-ul.svg',
-                x: vw / 2 - 200 + 155,
-                docY: heroTop + vh * 0.05,
-                width: 200, height: 280,
-                proximityFade: false, blinking: true
-            });
-
-            // Skills C++
-            const srLeft = skillsR.getBoundingClientRect().left;
-            engine.addMask({
-                src: 'img/cpp-placeholder.svg',
-                x: srLeft, docY: docTop(skillsR),
-                width: 480, height: 270, proximityFade: false
-            });
-            // Skills Python
-            engine.addMask({
-                src: 'img/python-placeholder.svg',
-                x: srLeft + 20, docY: docTop(skillsR) + 280,
-                width: 460, height: 190, proximityFade: false
-            });
-
-            // Systems Java
-            const sysLeft = systemsR.getBoundingClientRect().left;
-            engine.addMask({
-                src: 'img/java-placeholder.svg',
-                x: sysLeft, docY: docTop(systemsR) + 20,
-                width: 420, height: 210, proximityFade: false
-            });
-
-            // Experience robot
-            engine.addMask({
-                src: 'img/robot.svg',
-                x: vw * 0.62, docY: docTop(expSec) + 40,
-                width: 300, height: 390, proximityFade: false
-            });
-            // Experience shield
-            engine.addMask({
-                src: 'img/shield.svg',
-                x: vw * 0.63, docY: docTop(expSec) + expSec.offsetHeight * 0.64,
-                width: 260, height: 300, proximityFade: false
-            });
         }
 
         engine.start();
@@ -295,12 +317,9 @@
             document.querySelectorAll('.nav-link').forEach(el => el.remove());
             engine.getNavItemRects().forEach((rect, i) => {
                 const a = document.createElement('a');
-                a.href = rect.href;
-                a.className = 'nav-link';
-                a.style.left   = rect.x + 'px';
-                a.style.top    = rect.y + 'px';
-                a.style.width  = rect.width  + 'px';
-                a.style.height = rect.height + 'px';
+                a.href = rect.href; a.className = 'nav-link';
+                a.style.left = rect.x + 'px'; a.style.top = rect.y + 'px';
+                a.style.width = rect.width + 'px'; a.style.height = rect.height + 'px';
                 a.addEventListener('mouseenter', () => { engine.hoveredNavIndex = i; });
                 a.addEventListener('mouseleave', () => { engine.hoveredNavIndex = -1; });
                 document.body.appendChild(a);

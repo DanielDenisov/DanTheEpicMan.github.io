@@ -4,87 +4,112 @@ class TerminalEngine {
         if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
 
-        // Scratch canvas for per-mask compositing
-        this.offscreenCanvas = document.createElement('canvas');
-        this.offCtx = this.offscreenCanvas.getContext('2d');
-
-        // Static cached canvases — rebuilt only on resize, never during animation
-        this.dimCanvas    = document.createElement('canvas');
-        this.dimCtx       = this.dimCanvas.getContext('2d');
-        this.brightCanvas = document.createElement('canvas');
-        this.brightCtx    = this.brightCanvas.getContext('2d');
-
         this.fontSize    = config.fontSize    || 16;
         this.bgColor     = config.bgColor     || '#222222';
         this.dimColor    = config.dimColor    || '#2D2D2D';
         this.brightColor = config.brightColor || '#FFFFFF';
 
+        // Three pre-rendered canvases — all rebuilt on resize, never touched per-frame
+        this.dimCanvas   = document.createElement('canvas'); // bg + dim text
+        this.dimCtx      = this.dimCanvas.getContext('2d');
+        this.brightCanvas   = document.createElement('canvas'); // transparent + bright text
+        this.brightCtx      = this.brightCanvas.getContext('2d');
+
+        // Two per-frame working canvases (cleared & reused each frame)
+        this.maskAccumCanvas = document.createElement('canvas'); // accumulated mask shapes
+        this.maskAccumCtx    = this.maskAccumCanvas.getContext('2d');
+        this.revealCanvas    = document.createElement('canvas'); // bright text clipped to masks
+        this.revealCtx       = this.revealCanvas.getContext('2d');
+
         this.masks    = [];
         this.navItems = [];
         this.navRow   = config.navRow !== undefined ? config.navRow : 2;
         this.hoveredNavIndex = -1;
+        this.cols = 0; this.rows = 0;
 
-        this.cols = 0;
-        this.rows = 0;
-        this.viewportCenter = { x: 0, y: 0 };
+        this.sourceText = '';
 
-        this.sourceText = `void main() { vec2 uv = fragCoord.xy; if(mask.alpha > 0.5) { render_white(); } } template<typename T> class SystemMatrix { private: int bitmask; };`.replace(/\s+/g, ' ');
+        window.addEventListener('resize', () => { if (this.sourceText) this.resize(); });
 
-        this.initEvents();
-        this.resize();
-    }
-
-    initEvents() {
-        window.addEventListener('resize', () => this.resize());
-        window.addEventListener('scroll', () => this.updateTracking(), { passive: true });
-        this.updateTracking();
-    }
-
-    updateTracking() {
-        this.viewportCenter.x = window.innerWidth  / 2;
-        this.viewportCenter.y = window.innerHeight / 2;
+        const url = config.sourceTextUrl || 'source-text.txt';
+        fetch(url)
+            .then(r => r.text())
+            .then(t => {
+                this.sourceText = t.replace(/\s+/g, ' ').trim();
+                this.resize();
+            })
+            .catch(() => {
+                this.sourceText = 'void main() { vec2 uv = fragCoord.xy / iResolution.xy; }';
+                this.resize();
+            });
     }
 
     resize() {
         const w = window.innerWidth, h = window.innerHeight;
-        for (const c of [this.canvas, this.offscreenCanvas, this.dimCanvas, this.brightCanvas]) {
+        [this.canvas, this.dimCanvas, this.brightCanvas,
+         this.maskAccumCanvas, this.revealCanvas].forEach(c => {
             c.width = w; c.height = h;
-        }
+        });
 
         const font = `${this.fontSize}px 'Courier New', Courier, monospace`;
-        this.fontSetup = font;
-        for (const ctx of [this.ctx, this.offCtx, this.dimCtx, this.brightCtx]) {
-            ctx.font = font;
-            ctx.textBaseline = 'top';
-        }
 
-        this.charWidth = this.ctx.measureText('M').width;
+        this.dimCtx.font = font; this.dimCtx.textBaseline = 'top';
+        this.brightCtx.font = font; this.brightCtx.textBaseline = 'top';
+        this.ctx.font = font; this.ctx.textBaseline = 'top';
+
+        this.charWidth = this.dimCtx.measureText('M').width;
         this.cols = Math.ceil(w / this.charWidth);
         this.rows = Math.ceil(h / this.fontSize);
 
-        // Pre-render both grids — these are STATIC until next resize
-        this._prerenderGrids();
-    }
-
-    _prerenderGrids() {
-        // Dim grid
-        this.dimCtx.clearRect(0, 0, this.dimCanvas.width, this.dimCanvas.height);
-        this._drawTextGrid(this.dimCtx, this.dimColor);
-
-        // Bright grid
-        this.brightCtx.clearRect(0, 0, this.brightCanvas.width, this.brightCanvas.height);
-        this._drawTextGrid(this.brightCtx, this.brightColor);
-    }
-
-    _drawTextGrid(ctx, color) {
+        // dim canvas: background fill + dim text — drawn ONCE here
+        this.dimCtx.fillStyle = this.bgColor;
+        this.dimCtx.fillRect(0, 0, w, h);
+        this.dimCtx.fillStyle = this.dimColor;
         let idx = 0;
-        ctx.fillStyle = color;
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
-                ctx.fillText(this.sourceText[idx % this.sourceText.length], c * this.charWidth, r * this.fontSize);
-                idx++;
-            }
-        }
+        for (let r = 0; r < this.rows; r++)
+            for (let c = 0; c < this.cols; c++)
+                this.dimCtx.fillText(this.sourceText[idx++ % this.sourceText.length], c * this.charWidth, r * this.fontSize);
+
+        // bright canvas: transparent background + bright text — drawn ONCE here
+        // (clearRect is implicit: new canvas is already transparent)
+        this.brightCtx.fillStyle = this.brightColor;
+        idx = 0;
+        for (let r = 0; r < this.rows; r++)
+            for (let c = 0; c < this.cols; c++)
+                this.brightCtx.fillText(this.sourceText[idx++ % this.sourceText.length], c * this.charWidth, r * this.fontSize);
+
+        // Re-bake any already-loaded masks at new viewport size (they keep their docY)
+        this.masks.forEach(m => { if (m.loaded) this._bakeMaskCanvas(m); });
+    }
+
+    _bakeMaskCanvas(m) {
+        const mc = document.createElement('canvas');
+        mc.width  = Math.ceil(m.width);
+        mc.height = Math.ceil(m.height);
+        const mctx = mc.getContext('2d');
+
+        // Letterbox to natural aspect ratio — consistent across Chrome/Firefox
+        // (Chrome applies preserveAspectRatio="xMidYMid meet" natively; Firefox stretches.
+        //  Doing it manually here makes both browsers identical.)
+        const iw = m.img.naturalWidth  || mc.width;
+        const ih = m.img.naturalHeight || mc.height;
+        const scale = Math.min(mc.width / iw, mc.height / ih);
+        const dw = iw * scale, dh = ih * scale;
+        mctx.drawImage(m.img, (mc.width - dw) / 2, (mc.height - dh) / 2, dw, dh);
+
+        // Bake radial gradient fade into the mask shape via destination-in
+        const cx = mc.width  * 0.5;
+        const cy = mc.height * 0.5;
+        const radius = Math.sqrt(cx * cx + cy * cy) * 1.15;
+        const grd = mctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+        grd.addColorStop(0.0, 'rgba(0,0,0,1)');
+        grd.addColorStop(0.7, 'rgba(0,0,0,0.85)');
+        grd.addColorStop(1.0, 'rgba(0,0,0,0)');
+        mctx.globalCompositeOperation = 'destination-in';
+        mctx.fillStyle = grd;
+        mctx.fillRect(0, 0, mc.width, mc.height);
+
+        m.maskCanvas = mc;
     }
 
     setNavItems(items) { this.navItems = items; }
@@ -108,96 +133,74 @@ class TerminalEngine {
         const rects = this.getNavItemRects();
         const uY = Math.round(this.navRow * this.fontSize + this.fontSize * 0.82);
         const first = rects[0], last = rects[rects.length - 1];
-
         this.ctx.fillStyle = this.bgColor;
         this.ctx.fillRect(first.x, first.y, (last.x + last.width) - first.x, this.fontSize);
-
         rects.forEach((r, i) => {
             this.ctx.fillStyle = this.brightColor;
             this.ctx.fillText(r.text, r.x, r.y);
-            if (i === this.hoveredNavIndex) this.ctx.fillRect(r.x, uY, r.width, 1);
+            if (i === this.hoveredNavIndex) {
+                this.ctx.fillRect(r.x, uY, r.width, 1);
+            }
         });
     }
 
     addMask(options) {
-        const img = new Image();
-        img.src = options.src;
         const m = {
-            img,
+            img: new Image(),
             x: options.x || 0,
             y: options.y || 0,
             docY: options.docY,
-            width:  options.width  || 100,
-            height: options.height || 100,
-            proximityFade: options.proximityFade !== undefined ? options.proximityFade : true,
-            maxDistance: options.maxDistance || 300,
+            width:    options.width    || 100,
+            height:   options.height   || 100,
             blinking: options.blinking || false,
-            loaded: false
+            loaded: false,
+            maskCanvas: null
         };
-        img.onload  = () => { m.loaded = true; };
-        img.onerror = () => console.warn('mask failed:', options.src);
+
+        m.img.onload = () => {
+            this._bakeMaskCanvas(m);
+            m.loaded = true;
+        };
+        m.img.onerror = () => console.warn('Mask failed to load:', options.src);
+        m.img.src = options.src;
         this.masks.push(m);
     }
 
     renderFrame() {
         const scrollY = window.scrollY;
         const blinkOn = Math.floor(Date.now() / 530) % 2 === 0;
+        const w = this.canvas.width, h = this.canvas.height;
 
-        // 1. Background color
-        this.ctx.fillStyle = this.bgColor;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        // Update scroll-relative positions
+        this.masks.forEach(m => { if (m.docY !== undefined) m.y = m.docY - scrollY; });
 
-        // 2. Dim grid — GPU copy from pre-rendered static canvas (zero text drawing)
+        // 1. Blit dim grid (single GPU copy — zero text draws per frame)
         this.ctx.drawImage(this.dimCanvas, 0, 0);
 
-        // 3. Nav items
+        const activeMasks = this.masks.filter(m => m.loaded && m.maskCanvas && (!m.blinking || blinkOn));
+
+        if (activeMasks.length > 0) {
+            // 2. Accumulate all mask shapes into maskAccumCanvas
+            this.maskAccumCtx.clearRect(0, 0, w, h);
+            this.maskAccumCtx.globalCompositeOperation = 'source-over';
+            activeMasks.forEach(m => {
+                this.maskAccumCtx.drawImage(m.maskCanvas, Math.round(m.x), Math.round(m.y));
+            });
+
+            // 3. Reveal bright text through combined mask (single destination-in pass)
+            this.revealCtx.globalCompositeOperation = 'source-over';
+            this.revealCtx.clearRect(0, 0, w, h);
+            this.revealCtx.drawImage(this.brightCanvas, 0, 0);
+            this.revealCtx.globalCompositeOperation = 'destination-in';
+            this.revealCtx.drawImage(this.maskAccumCanvas, 0, 0);
+
+            // 4. Blit revealed text onto main canvas
+            this.ctx.globalCompositeOperation = 'source-over';
+            this.ctx.drawImage(this.revealCanvas, 0, 0);
+        }
+
+        // 5. Nav items on top
         this.drawNavItems();
-
-        // 4. Each mask independently — bright grid copy + destination-in shape
-        this.masks.filter(m => m.loaded).forEach(mask => {
-            if (mask.docY !== undefined) mask.y = mask.docY - scrollY;
-            if (mask.blinking && !blinkOn) return;
-
-            let alpha = 1.0;
-            if (mask.proximityFade) {
-                const cx = mask.x + mask.width  / 2;
-                const cy = mask.y + mask.height / 2;
-                const dx = cx - this.viewportCenter.x;
-                const dy = cy - this.viewportCenter.y;
-                alpha = 1.0 - Math.min(Math.sqrt(dx*dx + dy*dy) / mask.maxDistance, 1.0);
-            }
-            if (alpha <= 0) return;
-
-            // GPU copy of pre-rendered bright grid — no text drawing here
-            this.offCtx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
-            this.offCtx.drawImage(this.brightCanvas, 0, 0);
-
-            this.offCtx.save();
-            this.offCtx.globalCompositeOperation = 'destination-in';
-
-            // Cut to mask shape
-            this.offCtx.globalAlpha = alpha;
-            this.offCtx.drawImage(mask.img, mask.x, mask.y, mask.width, mask.height);
-
-            // Radial gradient edge fade
-            this.offCtx.globalAlpha = 1;
-            const cx = mask.x + mask.width  / 2;
-            const cy = mask.y + mask.height / 2;
-            const r  = Math.max(mask.width, mask.height) * 0.65;
-            const grad = this.offCtx.createRadialGradient(cx, cy, r * 0.15, cx, cy, r);
-            grad.addColorStop(0,    'rgba(0,0,0,1)');
-            grad.addColorStop(0.5,  'rgba(0,0,0,0.9)');
-            grad.addColorStop(0.75, 'rgba(0,0,0,0.4)');
-            grad.addColorStop(1,    'rgba(0,0,0,0)');
-            this.offCtx.fillStyle = grad;
-            this.offCtx.fillRect(
-                mask.x - mask.width  * 0.6, mask.y - mask.height * 0.6,
-                mask.width * 2.2,           mask.height * 2.2
-            );
-
-            this.offCtx.restore();
-            this.ctx.drawImage(this.offscreenCanvas, 0, 0);
-        });
     }
 
     start() {
